@@ -1,0 +1,4 @@
+uploads/*
+pythonscript/logger/*
+pythonscript/.env
+.user.ini
