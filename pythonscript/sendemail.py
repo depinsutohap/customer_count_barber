@@ -3,11 +3,16 @@ import os
 import base64
 from pathlib import PureWindowsPath
 from datetime import datetime
-api_key = "bd0841ed74847f0cd42967e932c579d2"
-api_secret = "42da03112f5607ab580cd383b03ada1d"
+from dotenv import load_dotenv
+import json
+
+load_dotenv()
+api_key = os.environ.get("API_KEY_EMAIL")
+api_secret = os.environ.get("API_SECRET_EMAIL")
 mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-datenow = "2025.06.28"
+datenow = "2025.06.29"
 # upload_folder = "C:\\work\\computer vision\\uploads\\"+datenow
+BASE_PATH = os.getenv('BASE_PATH')
 upload_folder = BASE_PATH+"/uploads/"+datenow
 extract_folder = upload_folder + "_extract"
 image_files = [os.path.join(extract_folder, f) for f in os.listdir(extract_folder) if f.endswith(('.jpg', '.jpeg', '.png'))]
@@ -32,34 +37,16 @@ while i < len(image_files)-1:
 	header += "</tr>"
 	i+=2
 header += "</table>"
-##Create zip of images and send it as attachment
-# os.popen('tar -a -c -f "'+extract_folder+'.zip" "C:\\work\\computer vision\\uploads"')
-# with open(extract_folder+'.zip', "rb") as file:
-# 	s = base64.b64encode(file.read()).decode("utf-8")
-# 	attachments.append({
-# 		"ContentType": "application/zip",
-# 		"Filename": os.path.basename(extract_folder+'.zip'),
-# 		"Base64Content": s
-# 	})
 data = {
   'Messages': [
 				{
-						"From": {
-                            "Email": "sienshum@gmail.com",
-                            "Name": "depin sutohap"
-						},
-						"To": [
-								{
-								"Email": "faceoffparlour@gmail.com",
-								# "Email": "depinsutohap@gmail.com",
-								"Name": "Owner of Faceoff Parlour"
-								}
-						],
-                        "Cc": [{"Name" : "Developer", "Email": "depinsutohap@gmail.com"}],
-						"Subject": "Auto Generate Report by Depin Sutohap "+datenow,
-                        # "TextPart": images,
-						"HTMLPart": header,
-                        "Attachments": attachments
+					"From": json.loads(os.getenv('EMAIL_FROM')),
+					"To": json.loads(os.getenv('EMAIL_TO')),
+					"Cc": json.loads(os.getenv('EMAIL_CC')),
+					"Subject": "Auto Generate Report by Depin Sutohap "+datenow,
+					# "TextPart": images,
+					"HTMLPart": header,
+					"Attachments": attachments
 				}
 		]
 }

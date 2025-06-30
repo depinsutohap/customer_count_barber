@@ -73,9 +73,9 @@ def send_email(datenow):
         counter+=1
         temp1 = PureWindowsPath(image_files[i]).parts[-1].split(".")[2][3:11]
         temp2 = PureWindowsPath(image_files[i+1]).parts[-1].split(".")[2][3:11]
-        date1 = datetime.strptime(temp1, "%H-%M-%S")
+        date1 = datetime.datetime.strptime(temp1, "%H-%M-%S")
         timestamp_seconds = date1.hour*3600 + date1.minute*60 + date1.second
-        date2 = datetime.strptime(temp2, "%H-%M-%S")
+        date2 = datetime.datetime.strptime(temp2, "%H-%M-%S")
         timestamp_seconds2 = date2.hour*3600 + date2.minute*60 + date2.second
         diff_seconds = timestamp_seconds2 - timestamp_seconds
         header += "<td>"+str(int(diff_seconds/60))+" Minutes "+str(diff_seconds%60) +"Seconds</td>"
